@@ -15,7 +15,8 @@ class CreateActivitiesTagsTable extends Migration
     {
         Schema::create('activities_tags', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('activity_id')->unsigned();
+            $table->integer('tag_id')->unsigned();
         });
     }
 

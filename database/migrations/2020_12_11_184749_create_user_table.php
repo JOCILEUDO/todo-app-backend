@@ -21,6 +21,7 @@ class CreateUserTable extends Migration
             $table->string('password');
             $table->string('four_key')->nullable();
             $table->string('profile_image')->default('no-avatar.png');
+            $table->string('type');
             $table->softDeletes();
             $table->timestamps();
         });

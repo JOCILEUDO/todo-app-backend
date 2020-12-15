@@ -13,8 +13,12 @@ class CreateTagTable extends Migration
      */
     public function up()
     {
-        Schema::create('tag', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id')->unsigned();
+            $table->string('name');
+            $table->string('color');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateTagTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tag');
+        Schema::dropIfExists('tags');
     }
 }

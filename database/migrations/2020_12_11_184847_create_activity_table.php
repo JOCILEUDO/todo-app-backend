@@ -13,8 +13,15 @@ class CreateActivityTable extends Migration
      */
     public function up()
     {
-        Schema::create('activity', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id')->unsigned();
+            $table->integer('category_id')->unsigned();
+            $table->string('title');
+            $table->string('description')->nullable();
+            $table->boolean('finished');
+            $table->dateTime('expired');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -26,6 +33,6 @@ class CreateActivityTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('activity');
+        Schema::dropIfExists('activities');
     }
 }
