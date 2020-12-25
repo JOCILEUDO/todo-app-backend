@@ -15,12 +15,21 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-Route::post('register', 'RegisterController@register');
+// API route group
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->post('register', 'AuthController@register');
+    $router->post('login', 'AuthController@login'); 
+    $router->get('me', 'UserController@profile');
 
-Route::group(['middleware' => 'api', 'prefix' => 'auth' ], function ($router) {
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me',       'AuthController@me');
+    $router->group(['prefix' => 'category'], function() use ($router) {
+        $router->post('/', 'CategoryController@store');
+    });
+
+    $router->group(['prefix' => 'tag'], function() use ($router) {
+        $router->post('/', 'TagController@store');
+    });
+
+    $router->group(['prefix' => 'activity'], function() use ($router) {
+        $router->post('/', 'ActivityController@store');
+    });
 });
-

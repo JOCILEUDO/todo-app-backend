@@ -16,11 +16,11 @@ class CreateActivityTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->unsigned();
-            $table->integer('category_id')->unsigned();
+            $table->integer('category_id')->nullable()->unsigned();
             $table->string('title');
             $table->string('description')->nullable();
+            $table->dateTime('expire_date')->nullable();
             $table->boolean('finished');
-            $table->dateTime('expired');
             $table->softDeletes();
             $table->timestamps();
         });
