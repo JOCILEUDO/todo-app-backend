@@ -34,7 +34,7 @@ Além disto é bom ter um editor para trabalhar com o código como [VSCode](http
 
 ```bash
 # Clone este repositório
-$ git clone <https://github.com/JOCILEUDO/todo-app-backend>
+$ git clone https://github.com/JOCILEUDO/todo-app-backend
 
 # Acesse a pasta do projeto no terminal/cmd
 $ cd todo-app-backend
