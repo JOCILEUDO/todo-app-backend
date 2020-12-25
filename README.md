@@ -46,7 +46,7 @@ $ composer install
 $ php -S localhost:8100 -t public/   
 
 # O servidor inciará na porta:8100 - acesse <http://localhost:8100>
-
+```
 ### 🛠 Tecnologias
 
 As seguintes ferramentas foram usadas na construção do projeto:
