@@ -22,11 +22,19 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('me', 'UserController@profile');
 
     $router->group(['prefix' => 'category'], function() use ($router) {
-        $router->post('/', 'CategoryController@store');
+        $router->get('/',   'CategoryController@index');
+        $router->post('/',      'CategoryController@store');
+        $router->get('/{id}',   'CategoryController@show');
+        $router->put('/{id}',   'CategoryController@update');
+        $router->delete('/{id}',   'CategoryController@destroy');
     });
 
     $router->group(['prefix' => 'tag'], function() use ($router) {
+        $router->get('/', 'TagController@index');
         $router->post('/', 'TagController@store');
+        $router->get('/{id}', 'TagController@show');
+        $router->put('/{id}', 'TagController@update');
+        $router->delete('/{id}', 'TagController@destroy');
     });
 
     $router->group(['prefix' => 'activity'], function() use ($router) {
