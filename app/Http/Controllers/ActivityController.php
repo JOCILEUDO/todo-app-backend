@@ -14,6 +14,10 @@ class ActivityController extends Controller
         $this->middleware('auth');
     }
 
+    public function index(Request $request)
+    {
+        return Activity::get();
+    }
 
     public function store(Request $request)
     {
@@ -21,7 +25,6 @@ class ActivityController extends Controller
         $this->validate($request, [
             'title' => 'required|string',
             'category_id' => 'numeric',
-            'expire_date' => 'datetime',
             'finished' => 'boolean',
             'description' => 'string'
         ]);
@@ -43,5 +46,36 @@ class ActivityController extends Controller
             throw $th;
             return response()->json(['error' => 'Não foi possível criar a categoria'], 500);
         }
+    }
+
+    public function show($id, Request $request)
+    {
+        return Activity::find($id);
+    }
+
+    public function destroy($id)
+    {
+        $activity = Activity::find($id);
+
+        if (!$activity) {
+            return response()->json(["error" => "Activity not found"], 404);
+        }
+
+        $activity->delete();
+
+        return response()->json([true], 204);
+    }
+
+    public function update($id, Request $request)
+    {
+        $activity = Activity::find($id);
+
+        if (!$activity) {
+            return response()->json(["error" => "Activity not found"], 404);
+        }
+
+        $activity->update($request->only(['title', 'category_id', 'expire_date', 'finished', 'description']));
+
+        return response()->json(['activity' => $activity], 200);
     }
 }
