@@ -21,7 +21,7 @@ class AuthController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'login' => 'required|string',
-            'type' => 'required|string',
+            'type' => 'required|string|in:admin,user',
             'password' => 'required|string|confirmed',
         ]);
 
@@ -62,7 +62,7 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    
+
 
 
     public function logout()

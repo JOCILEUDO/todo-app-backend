@@ -15,4 +15,9 @@ class Category extends Model
     'color',
     'icon'
   ];
+
+  public function Activities()
+  {
+    return $this->hasMany(Activity::class, 'category_id', 'id');
+  }
 }

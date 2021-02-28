@@ -16,7 +16,14 @@ class ActivityController extends Controller
 
     public function index(Request $request)
     {
-        return Activity::get();
+        if (auth()->user()->type == 'admin') {
+            return Activity::get();
+        } else {
+            $query = Activity::query();
+            $query->where('user_id', auth()->user()->id);
+
+            return $query->paginate($request->perpage ?? 25);
+        }
     }
 
     public function store(Request $request)
@@ -50,7 +57,21 @@ class ActivityController extends Controller
 
     public function show($id, Request $request)
     {
-        return Activity::find($id);
+        if (auth()->user()->type == 'admin') {
+            return Activity::find($id);
+        } else {
+
+            $activity = Activity::with(['Category'])
+                ->where('user_id', auth()->user()->id)
+                ->where('id', $id)
+                ->first();
+
+            if (!$activity) {
+                return response()->json(["error" => "Activity not found"], 404);
+            }
+
+            return $activity;
+        }
     }
 
     public function destroy($id)

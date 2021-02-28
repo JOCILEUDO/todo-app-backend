@@ -17,4 +17,9 @@ class Activity extends Model
     'finished',
     'description',
   ];
+
+  public function Category()
+  {
+    return $this->belongsTo(Category::class, 'category_id', 'id');
+  }
 }

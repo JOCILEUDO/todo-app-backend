@@ -13,11 +13,18 @@ class CategoryController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request){
-        $per_page = $request->has('per_page') ? intval($request->per_page) : 20;
-        $category = Category::paginate($per_page);
-        return $category;
-    } 
+    public function index(Request $request)
+    {
+        if (auth()->user()->type == 'admin') {
+            $per_page = $request->has('per_page') ? intval($request->per_page) : 20;
+            $category = Category::paginate($per_page);
+            return $category;
+        } else {
+            $per_page = $request->has('per_page') ? intval($request->per_page) : 20;
+            $category = Category::where('user_id', auth()->user()->id)->paginate($per_page);
+            return $category;
+        }
+    }
 
     public function store(Request $request)
     {
@@ -45,30 +52,45 @@ class CategoryController extends Controller
         }
     }
 
-    public function show($id){
-        $category = Category::find($id);
-        return $category;
-    } 
+    public function show($id)
+    {
+        if (auth()->user()->type == 'admin') {
+            $category = Category::find($id);
+            return $category;
+        } else {
 
-    public function update(Request $request, $id){
-        $category = Category::find($id);
+            $category = Category::withCount('Activities')->where('id', $id)
+                ->where('user_id', auth()->user()->id)
+                ->first();
 
-        if(!$category){
-            return response()->json(['error' => 'not_found', 'message' => 'Category not found' ], 404);
+            if (!$category) {
+                return response()->json(['error' => 'Categoria não encontrada'], 404);
+            }
+
+            return $category;
         }
-        
-        if($category->user_id != Auth::user()->id){
-            return response()->json(['error' => 'permission_denied', 'message' => 'Category not found' ], 404);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['error' => 'not_found', 'message' => 'Category not found'], 404);
+        }
+
+        if ($category->user_id != Auth::user()->id) {
+            return response()->json(['error' => 'permission_denied', 'message' => 'Category not found'], 404);
         }
 
         // atualizacoes
-        if($request->has('title')){
+        if ($request->has('title')) {
             $category->title = $request->input('title');
         }
-        if($request->has('color')){
+        if ($request->has('color')) {
             $category->color = $request->input('color');
         }
-        if($request->has('icon')){
+        if ($request->has('icon')) {
             $category->icon = $request->input('icon');
         }
 
@@ -76,12 +98,13 @@ class CategoryController extends Controller
         $category->save();
 
         return $category;
-    } 
+    }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $category = Category::find($id);
 
-        if(!$category){
+        if (!$category) {
             return response()->json(['error' => 'Category not found'], 500);
         }
 
